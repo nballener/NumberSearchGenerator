@@ -8,7 +8,8 @@ namespace numberSearchGenerator
         {
             Console.WriteLine("This is a number search generator!");
 
-            GameGrid gameGrid = new GameGrid(5, 5);
+            Game game = new Game(5, 5);
+            GameGrid gameGrid = game.GameGrid;
             gameGrid.GenerateGrid();
 
             Console.WriteLine(gameGrid);
