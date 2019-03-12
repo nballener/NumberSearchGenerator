@@ -9,10 +9,10 @@ namespace numberSearchGenerator
             Console.WriteLine("This is a number search generator!");
 
             Game game = new Game(5, 5);
-            GameGrid gameGrid = game.GameGrid;
-            gameGrid.GenerateGrid();
+            Console.WriteLine(game.GameGrid);
 
-            Console.WriteLine(gameGrid);
+            game.PrintAllClues();
+
         }
   }
 }

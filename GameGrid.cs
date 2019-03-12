@@ -14,7 +14,7 @@ namespace numberSearchGenerator
         {
             this.width = width;
             this.height = height;
-            this.grid = new List<int []>();
+            this.Grid = new List<int []>();
             this.random = new Random();
         }
 
@@ -29,14 +29,14 @@ namespace numberSearchGenerator
                     row[x] = this.random.Next(10);
                 }
 
-                this.grid.Add(row);
+                this.Grid.Add(row);
             }
         }
 
         public override string ToString() {
             string value = "";
 
-            foreach (int [] row in this.grid)
+            foreach (int [] row in this.Grid)
             {
                 foreach (int cell in row)
                 {
@@ -48,5 +48,7 @@ namespace numberSearchGenerator
 
             return value;
         }
+
+        public List<int[]> Grid { get => grid; set => grid = value; }
     }
 }
