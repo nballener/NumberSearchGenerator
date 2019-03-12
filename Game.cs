@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace numberSearchGenerator
 {
@@ -9,6 +10,7 @@ namespace numberSearchGenerator
 
         private int width;
         private int height;
+        private List<Clue> allClues;
 
         public Game(int width, int height)
         {
@@ -16,6 +18,5 @@ namespace numberSearchGenerator
             this.height = height;
             this.GameGrid = new GameGrid(width, height);
         }
-
-  }
+    }
 }
