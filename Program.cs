@@ -10,6 +10,8 @@ namespace numberSearchGenerator
 
             GameGrid gameGrid = new GameGrid(5, 5);
             gameGrid.GenerateGrid();
+
+            Console.WriteLine(gameGrid);
         }
   }
 }
