@@ -1,15 +1,17 @@
+using System.Collections.Generic;
+
 namespace numberSearchGenerator
 {
     public class Clue
     {
         private int length;
-        private int[] characters;
+        private List<int> characters;
         private Direction direction;
 
-        public Clue(int [] characters, Direction direction)
+        public Clue(List<int> characters, Direction direction)
         {
             this.characters = characters;
-            this.length = characters.Length;
+            this.length = characters.Count;
             this.direction = direction;
         }
 
@@ -17,16 +19,16 @@ namespace numberSearchGenerator
         {
             string value = "";
 
-            foreach(int character in characters)
+            foreach (int character in characters)
             {
                 value += character;
             }
 
-            return value;
+            return direction + ": " + value;
         }
 
         public int Length { get => length; set => length = value; }
-        public int[] Characters { get => characters; set => characters = value; }
+        public List<int> Characters { get => characters; set => characters = value; }
         public Direction Direction { get => direction; set => direction = value; }
     }
 }

@@ -7,14 +7,14 @@ namespace numberSearchGenerator
     {
         private int width;
         private int height;
-        private List<int []> grid;
+        private List<List<int>> grid;
         private Random random;
 
         public GameGrid(int width, int height)
         {
             this.width = width;
             this.height = height;
-            this.Grid = new List<int []>();
+            this.Grid = new List<List<int>>();
             this.random = new Random();
         }
 
@@ -22,11 +22,11 @@ namespace numberSearchGenerator
         {
             for (int y = 0; y < this.height; y++)
             {
-                int [] row = new int[this.width];
+                List<int> row = new List<int>();
 
                 for (int x = 0; x < this.width; x++)
                 {
-                    row[x] = this.random.Next(10);
+                    row.Add(this.random.Next(10));
                 }
 
                 this.Grid.Add(row);
@@ -36,7 +36,7 @@ namespace numberSearchGenerator
         public override string ToString() {
             string value = "";
 
-            foreach (int [] row in this.Grid)
+            foreach (List<int> row in this.Grid)
             {
                 foreach (int cell in row)
                 {
@@ -49,6 +49,6 @@ namespace numberSearchGenerator
             return value;
         }
 
-        public List<int[]> Grid { get => grid; set => grid = value; }
+        public List<List<int>> Grid { get => grid; set => grid = value; }
     }
 }

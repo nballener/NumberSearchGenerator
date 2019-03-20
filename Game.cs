@@ -34,10 +34,18 @@ namespace numberSearchGenerator
         private List<Clue> ExtractEastClues()
         {
             List<Clue> clues = new List<Clue>();
+            Direction direction = Direction.East;
 
-            foreach(int [] row in this.gameGrid.Grid)
+            foreach (List<int> row in this.gameGrid.Grid)
             {
-                clues.Add(new Clue(row, Direction.East));
+                int length = row.Count;
+                for (int i = 3; i < length; i++)
+                {
+                    Clue clue = new Clue(row.GetRange(0, i), direction);
+                    clues.Add(clue);
+                }
+
+                clues.Add(new Clue(row, direction));
             }
 
             return clues;
@@ -47,10 +55,11 @@ namespace numberSearchGenerator
         {
             List<Clue> clues = new List<Clue>();
 
-            foreach(Clue eastClue in eastClues)
+            foreach (Clue eastClue in eastClues)
             {
-                int [] westClueCharacters = (int []) eastClue.Characters.Clone();
-                Array.Reverse(westClueCharacters);
+                List<int> westClueCharacters = new List<int>();
+                westClueCharacters.AddRange(eastClue.Characters);
+                westClueCharacters.Reverse();
                 Clue westClue = new Clue(westClueCharacters, Direction.West);
                 clues.Add(westClue);
             }
@@ -61,11 +70,7 @@ namespace numberSearchGenerator
         public void PrintAllClues()
         {
             GameGrid gameGrid = this.GameGrid;
-
-            foreach (Clue clue in this.AllClues)
-            {
-                Console.WriteLine(clue);
-            }
+            this.AllClues.ForEach(clue => Console.WriteLine(clue));
         }
 
         public GameGrid GameGrid { get => gameGrid; set => gameGrid = value; }
