@@ -45,6 +45,12 @@ namespace numberSearchGenerator
                     clues.Add(clue);
                 }
 
+                for (int i = 0; i < length - 2; i++)
+                {
+                    Clue clue = new Clue(row.GetRange(i, length - i), direction);
+                    clues.Add(clue);
+                }
+
                 clues.Add(new Clue(row, direction));
             }
 
