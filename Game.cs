@@ -23,10 +23,35 @@ namespace numberSearchGenerator
         {
             List<Clue> eastClues = ExtractEastClues();
             List<Clue> westClues = ExtractWestClues(eastClues);
+            List<Clue> southClues = ExtractSouthClues();
 
             List<Clue> clues = new List<Clue>();
+
             clues.AddRange(eastClues);
             clues.AddRange(westClues);
+            clues.AddRange(southClues);
+
+            return clues;
+        }
+
+        private List<Clue> ExtractCluesFromList(List<int> row, Direction direction)
+        {
+            List<Clue> clues = new List<Clue>();
+
+            int length = row.Count;
+            for (int i = 3; i < length; i++)
+            {
+                Clue clue = new Clue(row.GetRange(0, i), direction);
+                clues.Add(clue);
+            }
+
+            for (int i = 0; i < length - 2; i++)
+            {
+                Clue clue = new Clue(row.GetRange(i, length - i), direction);
+                clues.Add(clue);
+                Console.WriteLine(clue);
+            }
+
 
             return clues;
         }
@@ -38,20 +63,7 @@ namespace numberSearchGenerator
 
             foreach (List<int> row in this.gameGrid.Grid)
             {
-                int length = row.Count;
-                for (int i = 3; i < length; i++)
-                {
-                    Clue clue = new Clue(row.GetRange(0, i), direction);
-                    clues.Add(clue);
-                }
-
-                for (int i = 0; i < length - 2; i++)
-                {
-                    Clue clue = new Clue(row.GetRange(i, length - i), direction);
-                    clues.Add(clue);
-                }
-
-                clues.Add(new Clue(row, direction));
+                clues.AddRange(ExtractCluesFromList(row, direction));
             }
 
             return clues;
@@ -67,7 +79,24 @@ namespace numberSearchGenerator
                 westClueCharacters.AddRange(eastClue.Characters);
                 westClueCharacters.Reverse();
                 Clue westClue = new Clue(westClueCharacters, Direction.West);
-                clues.Add(westClue);
+            }
+
+            return clues;
+        }
+
+        private List<Clue> ExtractSouthClues()
+        {
+            List<Clue> clues = new List<Clue>();
+            Direction direction = Direction.South;
+
+            int rowLength = gameGrid.Grid[0].Count;
+
+            for (int j = 0; j < rowLength; j++)
+            {
+                List<int> col = new List<int>();
+                gameGrid.Grid.ForEach(row => col.Add(row[j]));
+
+                clues.AddRange(ExtractCluesFromList(col, direction));
             }
 
             return clues;
