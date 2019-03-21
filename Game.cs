@@ -24,12 +24,14 @@ namespace numberSearchGenerator
             List<Clue> eastClues = ExtractEastClues();
             List<Clue> westClues = ExtractWestClues(eastClues);
             List<Clue> southClues = ExtractSouthClues();
+            List<Clue> northClues = ExtractNorthClues(southClues);
 
             List<Clue> clues = new List<Clue>();
 
             clues.AddRange(eastClues);
             clues.AddRange(westClues);
             clues.AddRange(southClues);
+            clues.AddRange(northClues);
 
             return clues;
         }
@@ -79,6 +81,7 @@ namespace numberSearchGenerator
                 westClueCharacters.AddRange(eastClue.Characters);
                 westClueCharacters.Reverse();
                 Clue westClue = new Clue(westClueCharacters, Direction.West);
+                clues.Add(westClue);
             }
 
             return clues;
@@ -97,6 +100,22 @@ namespace numberSearchGenerator
                 gameGrid.Grid.ForEach(row => col.Add(row[j]));
 
                 clues.AddRange(ExtractCluesFromList(col, direction));
+            }
+
+            return clues;
+        }
+
+        private List<Clue> ExtractNorthClues(List<Clue> southClues)
+        {
+            List<Clue> clues = new List<Clue>();
+
+            foreach (Clue southClue in southClues)
+            {
+                List<int> northClueCharacters = new List<int>();
+                northClueCharacters.AddRange(southClue.Characters);
+                northClueCharacters.Reverse();
+                Clue northClue = new Clue(northClueCharacters, Direction.North);
+                clues.Add(northClue);
             }
 
             return clues;
