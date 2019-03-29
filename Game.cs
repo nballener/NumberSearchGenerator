@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 namespace numberSearchGenerator
@@ -9,14 +10,16 @@ namespace numberSearchGenerator
         private int width;
         private int height;
         private List<Clue> allClues;
+        private List<Clue> selectedClues;
 
-        public Game(int width, int height)
+        public Game(int width, int height, int maxClues)
         {
             this.width = width;
             this.height = height;
             this.gameGrid = new GameGrid(width, height);
             this.gameGrid.GenerateGrid();
             this.allClues = ExtractClues();
+            this.selectedClues = SelectClues(max: maxClues);
         }
 
         private List<Clue> ExtractClues()
@@ -36,6 +39,40 @@ namespace numberSearchGenerator
             return clues;
         }
 
+        private List<Clue> SelectClues(int max)
+        {
+            List<Clue> clues = new List<Clue>();
+
+            int allCluesCount = this.allClues.Count;
+            int currentClueCount = 0;
+            int tries = 0;
+            Random rand = new Random();
+
+            while (currentClueCount < max && tries < 1000)
+            {
+                tries++;
+                Clue clue = this.allClues[rand.Next(allCluesCount)];
+                if (clues.Find(_clue => _clue == clue || _clue.Opposite == clue) == null)
+                {
+                    Clue matching = clues.Find(_clue => {
+                        bool matching_check = Regex.IsMatch(_clue.CharacterString(), clue.CharacterString());
+                        bool matching_check_reverse = Regex.IsMatch(clue.CharacterString(), _clue.CharacterString());
+                        bool matching_direction = _clue.Direction == clue.Direction;
+                        return (matching_check || matching_check_reverse) && matching_direction;
+                    });
+
+                    if (matching == null)
+                    {
+                        clues.Add(clue);
+                        currentClueCount++;
+                        tries = 0;
+                    }
+                }
+            }
+
+            return clues;
+        }
+
         private List<Clue> ExtractCluesFromList(List<int> row, Direction direction)
         {
             List<Clue> clues = new List<Clue>();
@@ -43,15 +80,14 @@ namespace numberSearchGenerator
             int length = row.Count;
             for (int i = 3; i < length; i++)
             {
-                Clue clue = new Clue(row.GetRange(0, i), direction);
+                Clue clue = new Clue(Guid.NewGuid(), row.GetRange(0, i), direction);
                 clues.Add(clue);
             }
 
             for (int i = 0; i < length - 2; i++)
             {
-                Clue clue = new Clue(row.GetRange(i, length - i), direction);
+                Clue clue = new Clue(Guid.NewGuid(), row.GetRange(i, length - i), direction);
                 clues.Add(clue);
-                Console.WriteLine(clue);
             }
 
 
@@ -80,7 +116,9 @@ namespace numberSearchGenerator
                 List<int> westClueCharacters = new List<int>();
                 westClueCharacters.AddRange(eastClue.Characters);
                 westClueCharacters.Reverse();
-                Clue westClue = new Clue(westClueCharacters, Direction.West);
+                Clue westClue = new Clue(Guid.NewGuid(), westClueCharacters, Direction.West);
+                eastClue.Opposite = westClue;
+                westClue.Opposite = eastClue;
                 clues.Add(westClue);
             }
 
@@ -114,7 +152,9 @@ namespace numberSearchGenerator
                 List<int> northClueCharacters = new List<int>();
                 northClueCharacters.AddRange(southClue.Characters);
                 northClueCharacters.Reverse();
-                Clue northClue = new Clue(northClueCharacters, Direction.North);
+                Clue northClue = new Clue(Guid.NewGuid(), northClueCharacters, Direction.North);
+                southClue.Opposite = northClue;
+                northClue.Opposite = southClue;
                 clues.Add(northClue);
             }
 
@@ -125,6 +165,21 @@ namespace numberSearchGenerator
         {
             GameGrid gameGrid = this.GameGrid;
             this.AllClues.ForEach(clue => Console.WriteLine(clue));
+        }
+
+        public void PrintSelectedClues()
+        {
+            GameGrid gameGrid = this.GameGrid;
+
+            this.selectedClues.Sort((a, b) => {
+                if (a.Characters.Count < b.Characters.Count) return -1;
+                else if (a.Characters.Count > b.Characters.Count) return 1;
+                else return 0;
+            });
+
+            this.selectedClues.ForEach(clue => Console.WriteLine(clue));
+
+            Console.WriteLine($"Total Clues: {this.selectedClues.Count}");
         }
 
         public GameGrid GameGrid { get => gameGrid; set => gameGrid = value; }
