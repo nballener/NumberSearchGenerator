@@ -24,17 +24,20 @@ namespace numberSearchGenerator
 
         private List<Clue> ExtractClues()
         {
-            List<Clue> eastClues = ExtractEastClues();
-            List<Clue> westClues = ExtractWestClues(eastClues);
-            List<Clue> southClues = ExtractSouthClues();
-            List<Clue> northClues = ExtractNorthClues(southClues);
+            // List<Clue> eastClues = ExtractEastClues();
+            // List<Clue> westClues = ExtractWestClues(eastClues);
+            // List<Clue> southClues = ExtractSouthClues();
+            // List<Clue> northClues = ExtractNorthClues(southClues);
+
+            List<Clue> southEastClues = ExtractSouthEastClue();
 
             List<Clue> clues = new List<Clue>();
 
-            clues.AddRange(eastClues);
-            clues.AddRange(westClues);
-            clues.AddRange(southClues);
-            clues.AddRange(northClues);
+            // clues.AddRange(eastClues);
+            // clues.AddRange(westClues);
+            // clues.AddRange(southClues);
+            // clues.AddRange(northClues);
+            clues.AddRange(southEastClues);
 
             return clues;
         }
@@ -156,6 +159,40 @@ namespace numberSearchGenerator
                 southClue.Opposite = northClue;
                 northClue.Opposite = southClue;
                 clues.Add(northClue);
+            }
+
+            return clues;
+        }
+
+        public List<Clue> ExtractSouthEastClue()
+        {
+            List<Clue> clues = new List<Clue>();
+            Direction direction = Direction.SouthEast;
+
+            int minLength = 3;
+            int startX = 0;
+            
+            for (int startY = gameGrid.Grid[0].Count - minLength; startY >= 0; startY--)
+            {
+                int x = startX;
+                int y = startY;
+                int currentLength = 0;
+
+                List<int> row = new List<int>();
+                while (true)
+                {
+                    row.Add(gameGrid.Grid[y][x]);
+                    currentLength++;
+                    x++;
+                    y++;
+
+                    if (y == gameGrid.Grid.Count)
+                        break;
+                    if (x == gameGrid.Grid[0].Count)
+                        break;
+                }
+
+                clues.AddRange(ExtractCluesFromList(row, direction));
             }
 
             return clues;

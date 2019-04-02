@@ -8,10 +8,10 @@ namespace numberSearchGenerator
         {
             Console.WriteLine("This is a number search generator!");
 
-            Game game = new Game(10, 10, 25);
+            Game game = new Game(5, 5, 25);
 
-            // game.PrintAllClues();
-            game.PrintSelectedClues();
+            game.PrintAllClues();
+            // game.PrintSelectedClues();
 
             Console.WriteLine(game.GameGrid);
         }

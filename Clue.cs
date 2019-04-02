@@ -30,12 +30,7 @@ namespace numberSearchGenerator
         public string CharacterString()
         {
             string value = "";
-
-            foreach (int character in characters)
-            {
-                value += character;
-            }
-
+            characters.ForEach(c => value += c);
             return value;
         }
 
