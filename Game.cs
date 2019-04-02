@@ -216,7 +216,7 @@ namespace numberSearchGenerator
             int minLength = 3;
             int startX = 0;
             
-            for (int startY = gameGrid.Grid[0].Count - minLength; startY >= 0; startY--)
+            for (int startY = gameGrid.Grid.Count - minLength; startY >= 0; startY--)
             {
                 int x = startX;
                 int y = startY;
@@ -237,6 +237,29 @@ namespace numberSearchGenerator
                 }
 
                 clues.AddRange(ExtractCluesFromList(row, direction, startX, startY));
+            }
+
+            for (int currentStartX = 1; currentStartX <= gameGrid.Grid[0].Count - minLength; currentStartX++)
+            {
+                int x = currentStartX;
+                int y = 0;
+                int currentLength = 0;
+
+                List<int> row = new List<int>();
+                while (true)
+                {
+                    row.Add(gameGrid.Grid[y][x]);
+                    currentLength++;
+                    x++;
+                    y++;
+
+                    if (y == gameGrid.Grid.Count)
+                        break;
+                    if (x == gameGrid.Grid[0].Count)
+                        break;
+                }
+
+                clues.AddRange(ExtractCluesFromList(row, direction, currentStartX, 0));
             }
 
             return clues;
