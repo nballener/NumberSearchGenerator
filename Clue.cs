@@ -11,20 +11,24 @@ namespace numberSearchGenerator
         private Direction direction;
         private Clue opposite;
         private List<Clue> subClues;
+        private int x;
+        private int y;
 
-        public Clue(Guid id, List<int> characters, Direction direction)
+        public Clue(Guid id, List<int> characters, Direction direction, int x, int y)
         {
             this.id = id;
             this.characters = characters;
             this.length = characters.Count;
             this.direction = direction;
+            this.X = x;
+            this.Y = y;
         }
 
         public override string ToString()
         {
             string value = CharacterString();
 
-            return $"{value}: {direction}";
+            return $"{value}: {direction}, ({x}, {y})";
         }
 
         public string CharacterString()
@@ -40,5 +44,7 @@ namespace numberSearchGenerator
         public Clue Opposite { get => opposite; set => opposite = value; }
         public Guid ID { get => id; set => id = value; }
         public List<Clue> SubClues { get => subClues; set => subClues = value; }
+        public int X { get => x; set => x = value; }
+        public int Y { get => y; set => y = value; }
     }
 }

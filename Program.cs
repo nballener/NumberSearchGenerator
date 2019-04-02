@@ -13,6 +13,7 @@ namespace numberSearchGenerator
             game.PrintAllClues();
             // game.PrintSelectedClues();
 
+            Console.WriteLine();
             Console.WriteLine(game.GameGrid);
         }
   }
