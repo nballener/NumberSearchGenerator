@@ -24,20 +24,24 @@ namespace numberSearchGenerator
 
         private List<Clue> ExtractClues()
         {
-            // List<Clue> eastClues = ExtractEastClues();
-            // List<Clue> westClues = ExtractWestClues(eastClues);
-            // List<Clue> southClues = ExtractSouthClues();
-            // List<Clue> northClues = ExtractNorthClues(southClues);
-
-            List<Clue> southEastClues = ExtractSouthEastClue();
-
             List<Clue> clues = new List<Clue>();
 
+            // List<Clue> eastClues = ExtractEastClues();
             // clues.AddRange(eastClues);
+
+            // List<Clue> westClues = ExtractWestClues(eastClues);
             // clues.AddRange(westClues);
+
+            // List<Clue> southClues = ExtractSouthClues();
             // clues.AddRange(southClues);
+
+            // List<Clue> northClues = ExtractNorthClues(southClues);
             // clues.AddRange(northClues);
+
+            List<Clue> southEastClues = ExtractSouthEastClue();
             clues.AddRange(southEastClues);
+
+
 
             return clues;
         }
@@ -87,9 +91,6 @@ namespace numberSearchGenerator
             {
                 Clue clue = new Clue(Guid.NewGuid(), row.GetRange(0, i), direction, _x, _y);
                 clues.Add(clue);
-
-                _x = IncrementXByDirection(_x, direction);
-                _y = IncrementYByDirection(_y, direction);
             }
 
             _x = x;
@@ -111,10 +112,13 @@ namespace numberSearchGenerator
         private int IncrementXByDirection(int x, Direction direction)
         {
             switch(direction)
-                {
-                    case Direction.SouthEast:
-                        return x + 1;
-                }
+            {
+                case Direction.East:
+                case Direction.SouthEast:
+                    return x + 1;
+                case Direction.West:
+                    return x - 1;
+            }
 
             return x;
         }
@@ -122,10 +126,13 @@ namespace numberSearchGenerator
         private int IncrementYByDirection(int y, Direction direction)
         {
             switch(direction)
-                {
-                    case Direction.SouthEast:
-                        return y + 1;
-                }
+            {
+                case Direction.South:
+                case Direction.SouthEast:
+                    return y + 1;
+                case Direction.North:
+                    return y - 1;
+            }
             
             return y;
         }
@@ -135,9 +142,11 @@ namespace numberSearchGenerator
             List<Clue> clues = new List<Clue>();
             Direction direction = Direction.East;
 
+            int rowCount = 0;
             foreach (List<int> row in this.gameGrid.Grid)
             {
-                clues.AddRange(ExtractCluesFromList(row, direction, 0, 0));
+                clues.AddRange(ExtractCluesFromList(row, direction, 0, rowCount));
+                rowCount++;
             }
 
             return clues;
@@ -152,7 +161,8 @@ namespace numberSearchGenerator
                 List<int> westClueCharacters = new List<int>();
                 westClueCharacters.AddRange(eastClue.Characters);
                 westClueCharacters.Reverse();
-                Clue westClue = new Clue(Guid.NewGuid(), westClueCharacters, Direction.West, 0, 0);
+
+                Clue westClue = new Clue(Guid.NewGuid(), westClueCharacters, Direction.West, eastClue.X + eastClue.Length - 1, eastClue.Y);
                 eastClue.Opposite = westClue;
                 westClue.Opposite = eastClue;
                 clues.Add(westClue);
@@ -173,7 +183,7 @@ namespace numberSearchGenerator
                 List<int> col = new List<int>();
                 gameGrid.Grid.ForEach(row => col.Add(row[j]));
 
-                clues.AddRange(ExtractCluesFromList(col, direction, 0, 0));
+                clues.AddRange(ExtractCluesFromList(col, direction, j, 0));
             }
 
             return clues;
@@ -188,7 +198,8 @@ namespace numberSearchGenerator
                 List<int> northClueCharacters = new List<int>();
                 northClueCharacters.AddRange(southClue.Characters);
                 northClueCharacters.Reverse();
-                Clue northClue = new Clue(Guid.NewGuid(), northClueCharacters, Direction.North, 0, 0);
+
+                Clue northClue = new Clue(Guid.NewGuid(), northClueCharacters, Direction.North, southClue.X, southClue.Y + southClue.Length - 1);
                 southClue.Opposite = northClue;
                 northClue.Opposite = southClue;
                 clues.Add(northClue);

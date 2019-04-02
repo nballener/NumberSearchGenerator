@@ -28,7 +28,7 @@ namespace numberSearchGenerator
         {
             string value = CharacterString();
 
-            return $"{value}: {direction}, ({x}, {y})";
+            return $"({x}, {y}): ".PadRight(10) + $"{direction.ToString().PadLeft(10)} [{value.PadLeft(30, '-')}] L: {length}";
         }
 
         public string CharacterString()

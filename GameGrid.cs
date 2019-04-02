@@ -36,15 +36,10 @@ namespace numberSearchGenerator
         public override string ToString() {
             string value = "";
 
-            foreach (List<int> row in this.Grid)
-            {
-                foreach (int cell in row)
-                {
-                    value += cell;
-                }
-
-                value += "\n";
-            }
+            this.Grid.ForEach(row => {
+                row.ForEach(cell => value += $"{cell} ");
+                value += "\n\n";
+            });
 
             return value;
         }

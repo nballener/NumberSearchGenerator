@@ -8,7 +8,7 @@ namespace numberSearchGenerator
         {
             Console.WriteLine("This is a number search generator!");
 
-            Game game = new Game(5, 5, 25);
+            Game game = new Game(6, 6, 25);
 
             game.PrintAllClues();
             // game.PrintSelectedClues();
