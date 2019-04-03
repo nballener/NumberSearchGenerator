@@ -26,26 +26,29 @@ namespace numberSearchGenerator
         {
             List<Clue> clues = new List<Clue>();
 
-            // List<Clue> eastClues = ExtractEastClues();
-            // clues.AddRange(eastClues);
+            List<Clue> eastClues = ExtractEastClues();
+            clues.AddRange(eastClues);
 
-            // List<Clue> westClues = ExtractOppositeClues(eastClues);
-            // clues.AddRange(westClues);
+            List<Clue> westClues = ExtractOppositeClues(eastClues);
+            clues.AddRange(westClues);
 
-            // List<Clue> southClues = ExtractSouthClues();
-            // clues.AddRange(southClues);
+            List<Clue> southClues = ExtractSouthClues();
+            clues.AddRange(southClues);
 
-            // List<Clue> northClues = ExtractOppositeClues(southClues);
-            // clues.AddRange(northClues);
+            List<Clue> northClues = ExtractOppositeClues(southClues);
+            clues.AddRange(northClues);
 
-            // List<Clue> southEastClues = ExtractSouthEastClues();
-            // clues.AddRange(southEastClues);
+            List<Clue> southEastClues = ExtractSouthEastClues();
+            clues.AddRange(southEastClues);
 
-            // List<Clue> northWestClues = ExtractOppositeClues(southEastClues);
-            // clues.AddRange(northWestClues);
+            List<Clue> northWestClues = ExtractOppositeClues(southEastClues);
+            clues.AddRange(northWestClues);
             
             List<Clue> northEastClues = ExtractNorthEastClues();
             clues.AddRange(northEastClues);
+
+            List<Clue> southWestClues = ExtractOppositeClues(northEastClues);
+            clues.AddRange(southWestClues);
             
             return clues;
         }
@@ -335,10 +338,10 @@ namespace numberSearchGenerator
 
             switch(direction)
             {
-                case Direction.East: return x + length - 1;
+                case Direction.East:
+                case Direction.NorthEast:
                 case Direction.SouthEast: return x + length - 1;
                 default: return x;
-                // case Direction.SouthWest: return Direction.NorthEast;
             }
         }
 
@@ -351,10 +354,10 @@ namespace numberSearchGenerator
 
             switch(direction)
             {
-                case Direction.East: return x;
+                case Direction.East: return y;
                 case Direction.SouthEast: return y + length - 1;
+                case Direction.NorthEast: return y - (length - 1);
                 default: return y + length - 1;
-                // case Direction.SouthWest: return Direction.NorthEast;
             }
         }
 
